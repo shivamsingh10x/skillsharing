@@ -22,6 +22,8 @@ axiosInstance.interceptors.request.use((config) => {
 axiosInstance.interceptors.response.use(
   (res) => res,
   (err) => {
+    console.error('API Error:', err.message);
+    
     if (err.response?.status === 401) {
       const token = localStorage.getItem('ssp_token');
       if (token) {
@@ -33,6 +35,13 @@ axiosInstance.interceptors.response.use(
         }
       }
     }
+    
+    // Network error handling
+    if (!err.response) {
+      console.error('Network Error - Backend not responding');
+      err.message = 'Network Error: Backend not responding. Please check if backend is deployed.';
+    }
+    
     return Promise.reject(err);
   }
 );
