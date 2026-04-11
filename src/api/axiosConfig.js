@@ -1,10 +1,12 @@
 import axios from 'axios';
 
-// Production: uses Render backend URL from .env.production
+// Production: uses Vercel backend URL from .env.production
 // Development: uses localhost:5000 directly
 const BASE = process.env.REACT_APP_API_URL
   ? `${process.env.REACT_APP_API_URL}/api`
   : 'http://localhost:5000/api';
+
+console.log('API Base URL:', BASE);
 
 const axiosInstance = axios.create({
   baseURL: BASE,

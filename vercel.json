@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "buildCommand": "npm install && cd backend && npm install",
+  "public": "public",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "env": {
+    "MONGO_URI": "@mongo_uri",
+    "JWT_SECRET": "@jwt_secret",
+    "JWT_EXPIRE": "7d",
+    "NODE_ENV": "production",
+    "CLIENT_URL": "@client_url"
+  }
+}

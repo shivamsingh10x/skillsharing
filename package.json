@@ -2,8 +2,8 @@
   "name": "skill-sharing-platform",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://shivamsingh10x.github.io/skill-sharing-platform",
-  "dependencies": {
+"homepage": "https://shivamsingh10x.github.io/skill-sharing-platform-new",  
+"dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -19,7 +19,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run build:backend && react-scripts build",
+    "build:backend": "cd backend && npm install",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "cd backend && npm run dev",
