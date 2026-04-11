@@ -1,7 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -10,15 +8,22 @@ const mongoose = require('mongoose');
 const app = express();
 
 // ── DB Connection ─────────────────────────────────────────────────────────────
+let isConnected = false;
+
 const connectDB = async () => {
+  if (isConnected) return;
+  
   try {
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      console.log('✅ MongoDB connected');
-    }
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      maxPoolSize: 10,
+      minPoolSize: 5,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+    isConnected = true;
+    console.log('✅ MongoDB connected');
   } catch (err) {
     console.error('❌ MongoDB connection error:', err.message);
     throw err;
@@ -27,17 +32,21 @@ const connectDB = async () => {
 
 // ── Security middleware ───────────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://shivamsingh10x.github.io',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'https://shivamsingh10x.github.io',
-    process.env.CLIENT_URL,
-  ].filter(Boolean),
+  origin: allowedOrigins,
   credentials: true,
 }));
+
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Rate limiting
 app.use('/api/', rateLimit({
@@ -54,7 +63,12 @@ app.use('/api/auth/', rateLimit({
 
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'SkillSphere API running', timestamp: new Date() });
+  res.json({ 
+    status: 'ok', 
+    message: 'SkillSphere API running', 
+    timestamp: new Date(),
+    environment: process.env.NODE_ENV 
+  });
 });
 
 // ── Routes ────────────────────────────────────────────────────────────────────

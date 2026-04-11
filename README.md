@@ -1,6 +1,6 @@
 # Skill Sharing Platform
 
-A modern full-stack application for skill sharing, built with React, TypeScript, Tailwind CSS, and Node.js.
+A modern full-stack application for skill sharing, built with React, Tailwind CSS, Node.js, and MongoDB.
 
 ## Features
 
@@ -8,113 +8,209 @@ A modern full-stack application for skill sharing, built with React, TypeScript,
 - Course browsing and search
 - Course enrollment
 - Mentor dashboard for course management
+- Student dashboard with progress tracking
+- Certificate generation
 - Responsive design with Tailwind CSS
-- TypeScript for type safety
+- Real-time notifications
 
 ## Tech Stack
 
-- **Frontend**: React 19, TypeScript, Tailwind CSS, React Router
-- **Backend**: Node.js, Express, MongoDB
-- **Deployment**: Docker
+- **Frontend**: React 19, Tailwind CSS, React Router, Axios
+- **Backend**: Node.js, Express, MongoDB, JWT
+- **Deployment**: Vercel + GitHub Pages
 
-## Getting Started
+## Getting Started Locally
 
 ### Prerequisites
 
 - Node.js 18+
 - npm or yarn
-- MongoDB (local or cloud)
+- MongoDB (local or Atlas)
 
 ### Installation
 
-1. Clone the repository
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/skill-sharing-platform-new.git
+   cd skill-sharing-platform
+   ```
+
 2. Install frontend dependencies:
    ```bash
    npm install
    ```
+
 3. Install backend dependencies:
    ```bash
    cd backend
    npm install
+   cd ..
    ```
-4. Start the backend:
+
+4. Create `.env` file in root:
+   ```
+   REACT_APP_API_URL=http://localhost:5000/api
+   ```
+
+5. Create `.env` file in `backend/`:
+   ```
+   PORT=5000
+   MONGO_URI=mongodb://localhost:27017/skillsphere
+   JWT_SECRET=your_secret_key_here
+   JWT_EXPIRE=7d
+   NODE_ENV=development
+   CLIENT_URL=http://localhost:3000
+   ```
+
+6. Start MongoDB locally or use MongoDB Atlas
+
+7. Start the backend:
    ```bash
    cd backend
    npm run dev
    ```
-5. Start the frontend:
+
+8. In a new terminal, start the frontend:
    ```bash
    npm start
    ```
 
-### Docker
+The app will open at `http://localhost:3000`
 
-Build and run with Docker:
+## Deployment on Vercel + GitHub
+
+### Step 1: MongoDB Atlas Setup
+
+1. Go to https://www.mongodb.com/cloud/atlas
+2. Create a free cluster
+3. Add a database user (username & password)
+4. Whitelist IP: 0.0.0.0/0
+5. Copy connection string: `mongodb+srv://user:password@cluster.mongodb.net/skillsphere`
+
+### Step 2: Push to GitHub
+
 ```bash
-docker build -t skill-sharing .
-docker run -p 5000:5000 skill-sharing
+git init
+git add .
+git commit -m "Initial commit - Vercel deployment ready"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/skill-sharing-platform-new.git
+git push -u origin main
 ```
+
+### Step 3: Deploy on Vercel
+
+1. Go to https://vercel.com
+2. Sign in with GitHub
+3. Click "New Project"
+4. Select your repository
+5. Add Environment Variables:
+   - `MONGO_URI`: Your MongoDB connection string
+   - `JWT_SECRET`: Strong secret key
+   - `JWT_EXPIRE`: `7d`
+   - `NODE_ENV`: `production`
+   - `CLIENT_URL`: Your GitHub Pages URL
+
+6. Click "Deploy"
+
+### Step 4: Update Frontend URL
+
+1. Update `.env.production`:
+   ```
+   REACT_APP_API_URL=https://your-vercel-domain.vercel.app/api
+   ```
+
+2. Push changes:
+   ```bash
+   git add .env.production
+   git commit -m "Update Vercel backend URL"
+   git push origin main
+   ```
+
+3. Deploy frontend:
+   ```bash
+   npm run deploy
+   ```
 
 ## Available Scripts
 
-- `npm start` - Start the development server
+- `npm start` - Start development server
 - `npm run build` - Build for production
-- `npm test` - Run tests
+- `npm run deploy` - Deploy to GitHub Pages
+- `npm run dev` - Run frontend + backend concurrently
+- `npm run server` - Run backend only
+
+## Project Structure
+
+```
+skill-sharing-platform/
+├── public/              # Static files
+├── src/                 # React frontend
+│   ├── api/            # API services
+│   ├── components/     # React components
+│   ├── context/        # Context providers
+│   ├── hooks/          # Custom hooks
+│   ├── pages/          # Page components
+│   └── App.js          # Main app
+├── backend/            # Node.js backend
+│   ├── config/         # Database config
+│   ├── controllers/    # Route controllers
+│   ├── middleware/     # Express middleware
+│   ├── models/         # MongoDB models
+│   ├── routes/         # API routes
+│   └── server.js       # Server entry
+├── api/                # Vercel serverless functions
+├── vercel.json         # Vercel configuration
+└── package.json        # Dependencies
+```
+
+## Testing
+
+### Sign Up
+1. Go to Register page
+2. Enter name, email, password
+3. Select role (student/mentor)
+4. Click Sign Up
+
+### Login
+1. Go to Login page
+2. Enter email and password
+3. Click Login
+
+### Browse Courses
+1. Go to Courses page
+2. View available courses
+3. Click on course to see details
+4. Enroll in course
+
+## Troubleshooting
+
+### Backend not responding
+- Check if MongoDB is running
+- Verify `MONGO_URI` in `.env`
+- Check backend logs: `npm run server`
+
+### Login/Signup not working
+- Check browser console (F12)
+- Verify `REACT_APP_API_URL` in `.env`
+- Check network tab for API errors
+
+### CORS errors
+- Verify `CLIENT_URL` in backend `.env`
+- Check if frontend URL matches `CLIENT_URL`
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m "Add your feature"`
+4. Push to branch: `git push origin feature/your-feature`
 5. Open a Pull Request
 
-### `npm run build`
+## License
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+ISC
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Support
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For issues and questions, please open an issue on GitHub.
