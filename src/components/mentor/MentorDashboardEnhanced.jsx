@@ -13,7 +13,6 @@ import BarChart from '../analytics/BarChart';
 import DonutChart from '../analytics/DonutChart';
 import DataTable from '../analytics/DataTable';
 import FilterBar from '../analytics/FilterBar';
-import MentorChatBox from './MentorChatBox';
 
 // Animated counter
 const AnimatedCounter = ({ value, duration = 2 }) => {
@@ -146,8 +145,6 @@ const MentorDashboardEnhanced = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-      <MentorChatBox />
-
       {/* Enhanced Banner with Animation */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
