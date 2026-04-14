@@ -1,0 +1,21 @@
+node_modules/
+build/
+
+# Environment secrets — never commit these
+.env
+.env.local
+.env.production.local
+.env.development.local
+backend/.env
+
+# .env.production is SAFE to commit — it only has the public API URL
+# .env.production   <-- intentionally NOT ignored
+
+*.log
+.DS_Store
+.idea/
+*.swp
+*.swo
+*~
+.cache/
+dist/

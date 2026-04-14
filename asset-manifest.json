@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.css": "/skillsharing/static/css/main.2d2b32ca.css",
+    "main.js": "/skillsharing/static/js/main.0c7bc037.js",
+    "index.html": "/skillsharing/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.2d2b32ca.css",
+    "static/js/main.0c7bc037.js"
+  ]
+}
