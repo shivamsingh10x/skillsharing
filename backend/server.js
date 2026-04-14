@@ -18,6 +18,7 @@ const io = new Server(server, {
       'http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002',
       'http://localhost:3003', 'http://localhost:3004', 'http://localhost:3005',
       'https://shivamsingh10x.github.io',
+      'https://shivamsingh10x.github.io/skillsharing',
       'https://skill-sharing-shivam.vercel.app',
       process.env.CLIENT_URL,
     ].filter(Boolean),
@@ -58,6 +59,7 @@ const allowedOrigins = [
   'http://localhost:3004',
   'http://localhost:3005',
   'https://shivamsingh10x.github.io',
+  'https://shivamsingh10x.github.io/skillsharing',
   'https://skill-sharing-shivam.vercel.app',
   process.env.CLIENT_URL,
 ].filter(Boolean);
@@ -84,6 +86,7 @@ app.use('/api/auth/', rateLimit({
 }));
 
 // ── Health ────────────────────────────────────────────────────────────────────
+app.get('/', (req, res) => res.json({ status: 'ok', message: 'SkillSphere API running', timestamp: new Date() }));
 app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'SkillSphere API running', timestamp: new Date() }));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
