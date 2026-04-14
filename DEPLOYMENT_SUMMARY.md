@@ -36,7 +36,7 @@
 4. Allow network access from anywhere
 5. Get connection string
 
-**Result:** Connection string like `mongodb+srv://skilluser:skillpass123@cluster0.xxxxx.mongodb.net/skillsphere`
+**Result:** Connection string like `mongodb+srv://skillsharing:Shivam@123@cluster0.ynfaunh.mongodb.net/?appName=Cluster0`
 
 ### Step 2: Deploy Backend on Vercel (10 minutes)
 1. Go to Vercel dashboard

@@ -3,7 +3,7 @@
  * Run: node seeder.js          (seed)
  * Run: node seeder.js --clear  (wipe all courses + users)
  */
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '.env') });
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const connectDB = require('./config/db');

@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '.env') });
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -94,6 +94,7 @@ app.use('/api/certificates', require('./routes/certificateRoutes'));
 app.use('/api/notifications',require('./routes/notificationRoutes'));
 app.use('/api/wishlist',     require('./routes/wishlistRoutes'));
 app.use('/api/analytics',   require('./routes/analyticsRoutes'));
+// app.use('/api/messages',     require('./routes/messageRoutes'));
 
 // ── 404 ───────────────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` }));
