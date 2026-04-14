@@ -1,7 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "npm install && cd backend && npm install",
-  "public": "public",
+  "buildCommand": "react-scripts build",
+  "outputDirectory": "build",
+  "installCommand": "npm install",
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -12,17 +13,13 @@
       "destination": "/index.html"
     }
   ],
-  "env": {
-    "MONGO_URI": "@mongo_uri",
-    "JWT_SECRET": "@jwt_secret",
-    "JWT_EXPIRE": "7d",
-    "NODE_ENV": "production",
-    "CLIENT_URL": "@client_url"
-  },
   "functions": {
     "api/index.js": {
       "memory": 1024,
       "maxDuration": 30
     }
+  },
+  "env": {
+    "NODE_ENV": "production"
   }
 }

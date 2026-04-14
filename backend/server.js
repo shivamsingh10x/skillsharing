@@ -18,6 +18,7 @@ const io = new Server(server, {
       'http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002',
       'http://localhost:3003', 'http://localhost:3004', 'http://localhost:3005',
       'https://shivamsingh10x.github.io',
+      'https://skill-sharing-shivam.vercel.app',
       process.env.CLIENT_URL,
     ].filter(Boolean),
     credentials: true,
@@ -48,13 +49,21 @@ connectDB();
 
 // ── Security middleware ───────────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002',
+  'http://localhost:3003',
+  'http://localhost:3004',
+  'http://localhost:3005',
+  'https://shivamsingh10x.github.io',
+  'https://skill-sharing-shivam.vercel.app',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002',
-    'http://localhost:3003', 'http://localhost:3004', 'http://localhost:3005',
-    'https://shivamsingh10x.github.io',
-    process.env.CLIENT_URL,
-  ].filter(Boolean),
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));

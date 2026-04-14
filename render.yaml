@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: skill-sharing-shivam-backend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        sync: false  # Set this manually in Render Dashboard
+      - key: JWT_SECRET
+        sync: false  # Set this manually in Render Dashboard
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: CLIENT_URL
+        value: https://shivamsingh10x.github.io/skill-sharing-shivam

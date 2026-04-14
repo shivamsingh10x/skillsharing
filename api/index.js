@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -7,28 +8,35 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-// ── DB Connection ─────────────────────────────────────────────────────────────
+// ── DB Connection (cached for Vercel serverless) ───────────────────────────────
 let isConnected = false;
 
 const connectDB = async () => {
-  if (isConnected) return;
-  
+  if (isConnected && mongoose.connection.readyState === 1) return;
+
   try {
     await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      maxPoolSize: 10,
-      minPoolSize: 5,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
     });
     isConnected = true;
     console.log('✅ MongoDB connected');
   } catch (err) {
+    isConnected = false;
     console.error('❌ MongoDB connection error:', err.message);
     throw err;
   }
 };
+
+// ── Ensure DB connected before every request (critical for Vercel) ────────────
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(503).json({ success: false, message: 'Database connection failed. Please try again.' });
+  }
+});
 
 // ── Security middleware ───────────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -63,32 +71,31 @@ app.use('/api/auth/', rateLimit({
 
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    message: 'SkillSphere API running', 
+  res.json({
+    status: 'ok',
+    message: 'SkillSphere API running',
     timestamp: new Date(),
-    environment: process.env.NODE_ENV 
+    environment: process.env.NODE_ENV,
+    db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
   });
 });
 
 // ── Routes ────────────────────────────────────────────────────────────────────
-app.use('/api/auth', require('../backend/routes/authRoutes'));
-app.use('/api/courses', require('../backend/routes/courseRoutes'));
-app.use('/api/reviews', require('../backend/routes/reviewRoutes'));
-app.use('/api/certificates', require('../backend/routes/certificateRoutes'));
-app.use('/api/notifications', require('../backend/routes/notificationRoutes'));
-app.use('/api/wishlist', require('../backend/routes/wishlistRoutes'));
-app.use('/api/analytics', require('../backend/routes/analyticsRoutes'));
+const backendPath = path.join(__dirname, '..', 'backend');
+app.use('/api/auth',         require(path.join(backendPath, 'routes', 'authRoutes')));
+app.use('/api/courses',      require(path.join(backendPath, 'routes', 'courseRoutes')));
+app.use('/api/reviews',      require(path.join(backendPath, 'routes', 'reviewRoutes')));
+app.use('/api/certificates', require(path.join(backendPath, 'routes', 'certificateRoutes')));
+app.use('/api/notifications',require(path.join(backendPath, 'routes', 'notificationRoutes')));
+app.use('/api/wishlist',     require(path.join(backendPath, 'routes', 'wishlistRoutes')));
+app.use('/api/analytics',    require(path.join(backendPath, 'routes', 'analyticsRoutes')));
 
 // ── 404 ───────────────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` }));
 
 // ── Error handler ─────────────────────────────────────────────────────────────
-const errorHandler = require('../backend/middleware/errorHandler');
+const errorHandler = require(path.join(backendPath, 'middleware', 'errorHandler'));
 app.use(errorHandler);
 
 // ── Export for Vercel ─────────────────────────────────────────────────────────
-module.exports = async (req, res) => {
-  await connectDB();
-  return app(req, res);
-};
+module.exports = app;
