@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import useCourses from '../../hooks/useCourses';
 import Loader from '../common/Loader';
-import { useTheme } from '../../context/ThemeContext';
 import axiosInstance from '../../api/axiosConfig';
 import { ChartCard, AnalyticsCard } from '../analytics/ChartCard';
 import LineChart from '../analytics/LineChart';
@@ -26,7 +25,6 @@ const ProgressBar = ({ pct, completedAt }) => (
 const StudentDashboard = () => {
   const { user } = useAuth();
   const { enrolledCourses, fetchEnrolledCourses, loading } = useCourses();
-  const { dark: _dark } = useTheme();
   const [analytics, setAnalytics] = useState(null);
   const [range, setRange] = useState('7d');
   const [analyticsLoading, setAnalyticsLoading] = useState(true);

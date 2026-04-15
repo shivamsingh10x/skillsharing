@@ -1,10 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
 import useCourses from '../../hooks/useCourses';
 import { deleteCourse } from '../../api/courseService';
 import Loader from '../common/Loader';
-import { useTheme } from '../../context/ThemeContext';
 import axiosInstance from '../../api/axiosConfig';
 import { ChartCard, AnalyticsCard } from '../analytics/ChartCard';
 import LineChart from '../analytics/LineChart';
@@ -14,9 +12,7 @@ import DataTable from '../analytics/DataTable';
 import FilterBar from '../analytics/FilterBar';
 
 const MentorDashboard = () => {
-  const { user: _user } = useAuth();
   const { mentorCourses, fetchMentorCourses, loading } = useCourses();
-  const { dark: _dark } = useTheme();
   const [analytics, setAnalytics] = useState(null);
   const [range, setRange] = useState('30d');
   const [analyticsLoading, setAnalyticsLoading] = useState(true);

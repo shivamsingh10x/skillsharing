@@ -17,6 +17,7 @@
     "joi": "^18.1.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.23.0",
+    "skill-sharing-platform": "file:..",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
